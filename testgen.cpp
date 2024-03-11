@@ -12,23 +12,21 @@
 #include <cstdlib> 
 #include <time.h> 
 using namespace std;
-#define MOD 1572869
-void genFiles(string file, const int nb, auto seed) {
-
-    srand(time(0));
+void genFiles(string file, const int nb, auto seed) { 
     for(int i=0; i<nb; ++i) {
         string aux = file;
         aux += to_string(i);
         ofstream g(aux);
 
         for(int it=0; it<201326611; ++it) {
-            g<<(seed*(rand()%MOD))/(seed*(rand()%24593)+1)<<' ';
+            g<<(seed*(rand()%1572869))/(seed*(rand()%24593)+1)<<' ';
         }
         g.close();
     }
 }
 int main()
 {
+    srand(time(0));
     string file = "test_int_";
     genFiles(file, 1, 15);
     file = "test_float_";
