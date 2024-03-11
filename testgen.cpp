@@ -21,8 +21,7 @@ void genFiles(string file, const int nb, auto seed) {
         aux += to_string(i);
         ofstream g(aux);
 
-        int limit = rand()%MOD;
-        for(int it=0; it<limit; ++it) {
+        for(int it=0; it<201326611; ++it) {
             g<<(seed*(rand()%MOD))/(seed*(rand()%24593)+1)<<' ';
         }
         g.close();
@@ -31,7 +30,7 @@ void genFiles(string file, const int nb, auto seed) {
 int main()
 {
     string file = "test_int_";
-    genFiles(file, 15, 15);
+    genFiles(file, 1, 15);
     file = "test_float_";
-    genFiles(file, 15, 15.13);
+    genFiles(file, 1, 15.13);
 }
