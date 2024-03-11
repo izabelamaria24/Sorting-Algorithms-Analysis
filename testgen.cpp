@@ -23,15 +23,15 @@ void genFiles(string file, const int nb, auto seed) {
 
         int limit = rand()%MOD;
         for(int it=0; it<limit; ++it) {
-            g<<(seed*seed*(rand()%MOD))/(seed*(rand()%MOD)+1)<<' ';
+            g<<(seed*(rand()%MOD))/(seed*(rand()%24593)+1)<<' ';
         }
         g.close();
     }
 }
 int main()
 {
-    string file = "test_intregi_";
+    string file = "test_int_";
     genFiles(file, 15, 15);
-    file = "teste_floating_";
+    file = "test_float_";
     genFiles(file, 15, 15.13);
 }
