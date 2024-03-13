@@ -31,7 +31,7 @@ public:
         data.push_back(element);
     }
 
-    double radixSort_10()
+    double radixSort_x(const int &x)
     {
         std::vector<T> aux = data;
         clock_t start = clock();
@@ -40,19 +40,20 @@ public:
         for (auto it : aux)
             if (aux[it] > maxx)
                 maxx = aux[it];
-        for (long long exp = 1; maxx / exp > 0; exp *= 10)
+        for (long long exp = 1; maxx / exp > 0; exp *= x)
         {
             long long size_aux = aux.size();
             std::vector<long long> res(size_aux);
-            long long i, fr[10] = {};
+            long long i;
+            vector<long long> fr(x, 0);
             for (auto it : aux)
-                fr[int(it / exp) % 10]++;
-            for (i = 1; i < 10; i++)
+                fr[int(it / exp) % x]++;
+            for (i = 1; i < x; i++)
                 fr[i] += fr[i - 1];
             for (i = size_aux - 1; i >= 0; i--)
             {
-                res[fr[int(aux[i] / exp) % 10] - 1] = aux[i];
-                fr[int(aux[i] / exp) % 10]--;
+                res[fr[int(aux[i] / exp) % x] - 1] = aux[i];
+                fr[int(aux[i] / exp) % x]--;
             }
             aux.clear();
             for (auto el : res)
@@ -64,7 +65,7 @@ public:
             return static_cast<double>(end - start) / CLOCKS_PER_SEC;
         return -1;
     }
-
+    
     double radixSort_2la16()
     {
         std::vector<T> aux = data;
@@ -206,7 +207,7 @@ public:
     {
         // copiem vectorul
         std::vector<T> aux;
-        std::priority_queue<T, std::vector<T>, std::greater<T>> pq;
+        std::priority_queue<T, std::vector<T>, std::greater<T> > pq;
 
         clock_t start = clock();
         // Sortam sortam
