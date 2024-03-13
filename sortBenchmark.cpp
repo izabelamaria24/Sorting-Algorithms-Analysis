@@ -12,5 +12,5 @@ int main() {
     }
     cout<<v.bucketSort()<<'\n';
     v.print();
-    
+
 }
