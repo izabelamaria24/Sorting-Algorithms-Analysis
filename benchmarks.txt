@@ -1,0 +1,8 @@
+Native sort on test_int_0: 44.9038 seconds
+Heap sort on test_int_0: 134.657 seconds
+Bucket sort on test_int_0: 24.7956 seconds
+Radix 10 sort on test_int_0: 66.6926 seconds
+Radix 1<<16 sort on test_int_0: 16.8439 seconds
+Merge sort on test_int_0: 44.8049 seconds
+Counting sort on test_int_0: 35.4663 seconds
+Shell sort on test_int_0: 326.808 seconds

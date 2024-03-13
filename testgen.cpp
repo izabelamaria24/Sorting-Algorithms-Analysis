@@ -11,7 +11,6 @@
 #include <fstream>
 #include <cstdlib> 
 #include <ctime>
-#include "sorts.hpp"
 
 using namespace std;
 
@@ -32,7 +31,7 @@ int main()
 {
     srand(time(0));
     string file = "test_int_";
-    genFiles(file, 1, 15);
+    genFiles(file, 5, 20);
     file = "test_float_";
-    genFiles(file, 1, 15.13);
+    genFiles(file, 5, 15.13);
 }

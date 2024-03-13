@@ -3,108 +3,122 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <ctime>
-#include <map>
 #include <queue>
 #include <limits>
+#include <map>
 template <typename T>
-class coolVector {
+class coolVector
+{
 private:
     std::vector<T> data;
+
+    bool checker(std::vector<T> &v)
+    {
+        auto prev = v[0];
+        for (const auto &elem : v)
+        {
+            if (elem < prev)
+                return 0;
+        }
+        return 1;
+    }
 
 public:
     coolVector() = default;
 
-    void add(T element) {
+    void add(T element)
+    {
         data.push_back(element);
     }
 
     double radixSort_10()
     {
-        std::vector<T> aux=data;
-        clock_t start=clock();
+        std::vector<T> aux = data;
+        clock_t start = clock();
 
-        long long maxx=aux[0];
-        for(auto it: aux)
-            if(aux[it] > maxx)
-                maxx=aux[it];
-        for(long long exp=1; maxx/exp > 0; exp*=10)
+        long long maxx = aux[0];
+        for (auto it : aux)
+            if (aux[it] > maxx)
+                maxx = aux[it];
+        for (long long exp = 1; maxx / exp > 0; exp *= 10)
         {
-            long long size_aux=aux.size();
+            long long size_aux = aux.size();
             std::vector<long long> res(size_aux);
-            long long i, fr[10]={};
-            for(auto it: aux)
-                fr[(it/exp)%10]++;
-            for(i=1; i < 10; i++)
-                fr[i]+=fr[i-1];
-            for(i=size_aux-1; i >= 0; i--)
+            long long i, fr[10] = {};
+            for (auto it : aux)
+                fr[int(it / exp) % 10]++;
+            for (i = 1; i < 10; i++)
+                fr[i] += fr[i - 1];
+            for (i = size_aux - 1; i >= 0; i--)
             {
-                res[fr[(aux[i]/exp)%10]-1]=aux[i];
-                fr[(aux[i]/exp)%10]--;
+                res[fr[int(aux[i] / exp) % 10] - 1] = aux[i];
+                fr[int(aux[i] / exp) % 10]--;
             }
             aux.clear();
-            for(auto el: res)
+            for (auto el : res)
                 aux.push_back(el);
         }
 
-        clock_t end=clock();
-        return static_cast<double>(end-start)/CLOCKS_PER_SEC;
+        clock_t end = clock();
+        if (checker(aux))
+            return static_cast<double>(end - start) / CLOCKS_PER_SEC;
+        return -1;
     }
 
     double radixSort_2la16()
     {
-        std::vector<T> aux=data;
-        clock_t start=clock();
+        std::vector<T> aux = data;
+        clock_t start = clock();
 
-        long long maxx=aux[0];
-        for(auto it: aux)
-            if(aux[it] > maxx)
-                maxx=aux[it];
-        for(long long exp=1; maxx/exp > 0; exp=exp << 16)
+        long long maxx = aux[0];
+        for (auto it : aux)
+            if (aux[it] > maxx)
+                maxx = aux[it];
+        for (long long exp = 1; maxx / exp > 0; exp = exp << 16)
         {
-            long long size_aux=aux.size();
+            long long size_aux = aux.size();
             std::vector<long long> res(size_aux);
-            long long i, fr[65536]={};
-            for(auto it: aux)
-                fr[(it/exp)%65536]++;
-            for(i=1; i < 65536; i++)
-                fr[i]+=fr[i-1];
-            for(i=size_aux-1; i >= 0; i--)
+            long long i, fr[65536] = {};
+            for (auto it : aux)
+                fr[int(it / exp) % 65536]++;
+            for (i = 1; i < 65536; i++)
+                fr[i] += fr[i - 1];
+            for (i = size_aux - 1; i >= 0; i--)
             {
-                res[fr[(aux[i]/exp)%65536]-1]=aux[i];
-                fr[(aux[i]/exp)%65536]--;
+                res[fr[int(aux[i] / exp) % 65536] - 1] = aux[i];
+                fr[int(aux[i] / exp) % 65536]--;
             }
             aux.clear();
-            for(auto el: res)
+            for (auto el : res)
                 aux.push_back(el);
         }
 
-        clock_t end=clock();
-        return static_cast<double>(end-start)/CLOCKS_PER_SEC;
+        clock_t end = clock();
+        if (checker(aux))
+            return static_cast<double>(end - start) / CLOCKS_PER_SEC;
+        return -1;
     }
 
     double mergeSort()
     {
-        std::vector<T> res=data;
-        clock_t start=clock();
+        std::vector<T> res = data;
 
         std::vector<T> aux(data.size());
 
-        long long size_aux=aux.size();
-        mergeSorter(aux, res, 0, size_aux-1);
-
-        data=aux;
-        print();
-
-        clock_t end=clock();
-        return static_cast<double>(end-start)/CLOCKS_PER_SEC;
+        long long size_aux = aux.size();
+        clock_t start = clock();
+        mergeSorter(aux, res, 0, size_aux - 1);
+        clock_t end = clock();
+        if (checker(res))
+            return static_cast<double>(end - start) / CLOCKS_PER_SEC;
+        return -1;
     }
 
-    double mergeSorter(std::vector<T> &aux, std::vector<T> &res, int left, int right)
+    void mergeSorter(std::vector<T> &aux, std::vector<T> &res, int left, int right)
     {
         if (left < right)
         {
-            long long mid = left + (right - left) / 2 ;
+            long long mid = left + (right - left) / 2;
             mergeSorter(aux, res, left, mid);
             mergeSorter(aux, res, mid + 1, right);
             long long i = left, j = mid + 1, k = 0;
@@ -121,25 +135,60 @@ public:
                 res[i] = aux[j];
         }
     }
-      
-    double shellSort() {
+
+    double shellSort()
+    {
         // copying array data in an auxiliary one
-        std::vector<T>sorted = data;
+        std::vector<T> aux = data;
 
         clock_t start = clock();
-        
-        int gap = sorted.size() / 2;
-        while (gap > 0) {
-            for (int i = gap; i < sorted.size(); i++) {
+
+        int gap = aux.size() / 2;
+        while (gap > 0)
+        {
+            for (int i = gap; i < aux.size(); i++)
+            {
                 int j = i;
-                while (j >= gap && sorted[j] < sorted[j - gap]) {
-                    std::swap(sorted[j], sorted[j -gap]);
+                while (j >= gap && aux[j] < aux[j - gap])
+                {
+                    std::swap(aux[j], aux[j - gap]);
                     j -= gap;
                 }
             }
             gap /= 2;
+        }
 
-    double functieSortare() {
+        clock_t end = clock();
+        if (checker(aux))
+            return static_cast<double>(end - start) / CLOCKS_PER_SEC;
+        return -1;
+    }
+
+    double countingSort()
+    {
+        std::vector<T> aux;
+        clock_t start = clock();
+
+        std::map<T, int> count;
+        for (const auto &elem : data)
+            count[elem]++;
+
+        for (const auto &elem : count)
+        {
+            T value = elem.first;
+            int cnt = elem.second;
+            for (int i = 0; i < cnt; ++i)
+                aux.emplace_back(value);
+        }
+
+        clock_t end = clock();
+        if (checker(aux))
+            return static_cast<double>(end - start) / CLOCKS_PER_SEC;
+        return -1;
+    }
+
+    double functieSortare()
+    {
         // copiem vectorul
         std::vector<T> aux = data;
         clock_t start = clock();
@@ -148,95 +197,92 @@ public:
         std::sort(aux.begin(), aux.end());
 
         clock_t end = clock();
-        return static_cast<double>(end - start) / CLOCKS_PER_SEC;
-
+        if (checker(aux))
+            return static_cast<double>(end - start) / CLOCKS_PER_SEC;
+        return -1;
     }
 
-    double heapSort() {
+    double heapSort()
+    {
         // copiem vectorul
         std::vector<T> aux;
         std::priority_queue<T, std::vector<T>, std::greater<T>> pq;
 
         clock_t start = clock();
         // Sortam sortam
-        for (const auto &elem : data) {
+        for (const auto &elem : data)
+        {
             pq.push(elem);
-
         }
 
-        while (!pq.empty()) {
+        while (!pq.empty())
+        {
             aux.push_back(pq.top());
             pq.pop();
         }
         clock_t end = clock();
-        data = aux; // debugging
-        return static_cast<double>(end - start) / CLOCKS_PER_SEC;
+        if (checker(aux))
+            return static_cast<double>(end - start) / CLOCKS_PER_SEC;
+        return -1;
     }
 
-
-    double countingSort() {
-        std::vector<T>sorted;
-        clock_t start = clock();
-
-        std::map<T, int>count;
-        for (const auto& elem : data) count[elem]++;
-
-        for (const auto& elem : count) {
-            T value = elem.first;
-            int cnt = elem.second;
-            for (int i = 0; i < cnt; ++i)
-                sorted.emplace_back(value);
-
-    double bucketSort() {
+    double bucketSort()
+    {
         // copiem vectorul
         std::vector<T> aux = data;
         clock_t start = clock();
 
         T Min = std::numeric_limits<T>::max();
         T Max = std::numeric_limits<T>::min();
-        for (const auto &val : data) {
+        for (const auto &val : data)
+        {
             if (val < Min)
                 Min = val;
             if (val > Max)
                 Max = val;
         }
 
-        //alegem bucket urile
+        // alegem bucket urile
         int nrBuckets = aux.size() / 4;
         double range = (Max - Min + 1) / static_cast<double>(nrBuckets);
         std::vector<std::vector<T>> buckets(nrBuckets);
 
-        for (const auto &val : aux) {
+        for (const auto &val : aux)
+        {
             int bucket_index = static_cast<int>((val - Min) / range);
             buckets[bucket_index].push_back(val);
         }
 
-        //sortam bucket urile individuale
-        for (auto &bucket : buckets) {
+        // sortam bucket urile individuale
+        for (auto &bucket : buckets)
+        {
             std::stable_sort(bucket.begin(), bucket.end());
         }
 
-        //inseram elementele din bucket uri in ordine inapoi in aux
+        // inseram elementele din bucket uri in ordine inapoi in aux
         int index = 0;
-        for (const auto &bucket : buckets) {
-            for (const auto &val : bucket) {
+        for (const auto &bucket : buckets)
+        {
+            for (const auto &val : bucket)
+            {
                 aux[index++] = val;
             }
         }
 
         clock_t end = clock();
-        data = aux;
-        return static_cast<double>(end - start) / CLOCKS_PER_SEC;
+        if (checker(aux))
+            return static_cast<double>(end - start) / CLOCKS_PER_SEC;
+        return -1;
     }
 
-    void print() const { // debugging
-        for (const auto &elem : data) {
+    void print() const
+    { // debugging
+        for (const auto &elem : data)
+        {
             std::cout << elem << " ";
-
         }
-
-        clock_t end = clock();
-        return static_cast<double>(end - start) / CLOCKS_PER_SEC;
+        std::cout << '\n';
     }
 };
+
 #endif
