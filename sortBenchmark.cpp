@@ -2,14 +2,15 @@
 #include <fstream>
 #include "sorts.hpp"
 using namespace std;
-
 int main() {
-    ifstream f("test_int_0");
+    ifstream f("test.txt");
     
-    coolVector<int> v;
-    int x;
+    coolVector<double> v;
+    double x;
     while(f>>x) {
         v.add(x);
     }
-    cout<<v.functieSortare()<<'\n';
+    cout<<v.bucketSort()<<'\n';
+    v.print();
+
 }

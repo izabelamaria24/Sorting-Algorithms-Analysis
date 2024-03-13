@@ -10,9 +10,12 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib> 
-#include <time.h> 
+#include <ctime>
+#include "sorts.hpp"
+
 using namespace std;
-void genFiles(string file, const int nb, auto seed) { 
+
+void genFiles(string file, const int nb, auto seed) {
     for(int i=0; i<nb; ++i) {
         string aux = file;
         aux += to_string(i);
@@ -24,6 +27,7 @@ void genFiles(string file, const int nb, auto seed) {
         g.close();
     }
 }
+
 int main()
 {
     srand(time(0));
