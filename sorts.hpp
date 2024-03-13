@@ -16,10 +16,12 @@ public:
     }
 
     double functieSortare() {
+        //copiem vectorul
+        std::vector<T> aux = data;
         clock_t start = clock();
         
         // Sortam sortam
-        std::sort(data.begin(), data.end());
+        std::sort(aux.begin(), aux.end());
 
         clock_t end = clock();
         return static_cast<double>(end - start) / CLOCKS_PER_SEC;
@@ -31,5 +33,6 @@ public:
         }
         std::cout << '\n';
     }
+    
 };
 #endif
