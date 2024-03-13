@@ -2,16 +2,15 @@
 #include <fstream>
 #include "sorts.hpp"
 using namespace std;
-
 int main() {
-    ifstream f("test_int_0");
-
-    coolVector<int> v;
-    int x;
+    ifstream f("test.txt");
+    
+    coolVector<double> v;
+    double x;
     while(f>>x) {
         v.add(x);
     }
+    cout<<v.bucketSort()<<'\n';
+    v.print();
 
-    cout<<v.shellSort()<<'\n';
-    cout<<v.countingSort()<<'\n';
 }
