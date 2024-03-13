@@ -42,7 +42,6 @@ public:
             for(auto el: res)
                 aux.push_back(el);
         }
-        radixSort_10(aux.begin(), aux.end());
 
         clock_t end=clock();
         return static_cast<double>(end-start)/CLOCKS_PER_SEC;
@@ -75,7 +74,6 @@ public:
             for(auto el: res)
                 aux.push_back(el);
         }
-        radixSort_2la16(aux.begin(), aux.end());
 
         clock_t end=clock();
         return static_cast<double>(end-start)/CLOCKS_PER_SEC;
@@ -83,35 +81,40 @@ public:
 
     double mergeSort()
     {
-        std::vector<T> aux=data;
+        std::vector<T> res=data;
         clock_t start=clock();
 
+        std::vector<T> aux(data.size());
+
         long long size_aux=aux.size();
-        mergeSorter(aux, 0, size_aux);
+        mergeSorter(aux, res, 0, size_aux-1);
+
+        data=aux;
+        print();
 
         clock_t end=clock();
         return static_cast<double>(end-start)/CLOCKS_PER_SEC;
     }
 
-    double mergeSorter(std::vector<T> &aux, int left, int right)
+    double mergeSorter(std::vector<T> &aux, std::vector<T> &res, int left, int right)
     {
         if (left < right)
         {
             long long mid = left + (right - left) / 2 ;
-            mergeSort(left, mid);
-            mergeSort(mid + 1, right);
+            mergeSorter(aux, res, left, mid);
+            mergeSorter(aux, res, mid + 1, right);
             long long i = left, j = mid + 1, k = 0;
-            while (i <= mid and j <= right)
-                if (data[i] < data[j])
-                    aux[++k] = data[i++];
+            while (i <= mid && j <= right)
+                if (res[i] < res[j])
+                    aux[k++] = res[i++];
                 else
-                    aux[++k] = data[j++];
+                    aux[k++] = res[j++];
             while (i <= mid)
-                aux[++k] = data[i++];
+                aux[k++] = res[i++];
             while (j <= right)
-                aux[++k] = data[j++];
-            for (i = left, j = 1; i <= right; i++, j++)
-                data[i] = aux[j];
+                aux[k++] = res[j++];
+            for (i = left, j = 0; i <= right; i++, j++)
+                res[i] = aux[j];
         }
     }
     
