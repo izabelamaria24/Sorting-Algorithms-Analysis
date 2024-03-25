@@ -16,8 +16,6 @@ int main() {
     // cout<<v.radixSort_10()<<" "<<v.radixSort_2la16()<<" <<v.bucketSort()<<" "<<v.functieSortare()<<" "<<v.heapSort()<<" "<<v.mergeSort()<<" "<<v.shellSort()<<" "<<v.countingSort();
     
 
-
-
     for (int i=0; i < 1; ++i) {
         double rez;
         string file = "test_int_" + to_string(i);
@@ -44,15 +42,20 @@ int main() {
         rez == -1 ? (g<<"Sort messed up") : g<<rez<<" seconds";
         g<<'\n';
 
-        rez = v.radixSort_10(); 
-        g<<"Radix 10 sort on "<<file<<": ";
+        rez = v.radixSort(2);
+        g<<"Bucket sort on "<<file<<": ";
         rez == -1 ? (g<<"Sort messed up") : g<<rez<<" seconds";
         g<<'\n';
 
-        rez = v.radixSort_2la16(); 
-        g<<"Radix 1<<16 sort on "<<file<<": ";
-        rez == -1 ? (g<<"Sort messed up") : g<<rez<<" seconds";
-        g<<'\n';
+//        rez = v.radixSort_10();
+//        g<<"Radix 10 sort on "<<file<<": ";
+//        rez == -1 ? (g<<"Sort messed up") : g<<rez<<" seconds";
+//        g<<'\n';
+//
+//        rez = v.radixSort_2la16();
+//        g<<"Radix 1<<16 sort on "<<file<<": ";
+//        rez == -1 ? (g<<"Sort messed up") : g<<rez<<" seconds";
+//        g<<'\n';
 
         rez = v.mergeSort(); 
         g<<"Merge sort on "<<file<<": ";

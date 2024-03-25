@@ -6,13 +6,14 @@
 #include <queue>
 #include <limits>
 #include <map>
+#include <ctime>
 template <typename T>
 class coolVector
 {
 private:
     std::vector<T> data;
 
-    bool checker(std::vector<T> &v)
+    bool checker(std::vector<T>&v)
     {
         auto prev = v[0];
         for (const auto &elem : v)
@@ -23,29 +24,28 @@ private:
         return 1;
     }
 
-public:
-    coolVector() = default;
-
-    void add(T element)
-    {
-        data.push_back(element);
+    // methods for radix sort
+    long long double_to_uint(double d) {
+        return *reinterpret_cast<long long*>(&d);
     }
 
-    double radixSort_x(const int &x)
-    {
-        std::vector<T> aux = data;
-        clock_t start = clock();
+    double uint_to_double(long long i) {
+        return *reinterpret_cast<double*>(&i);
+    }
 
-        long long maxx = aux[0];
+    void radixSort_x(const int x, std::vector<T>&aux)
+    {
+        if (aux.empty()) return;
+        T maxx = aux[0];
         for (auto it : aux)
-            if (aux[it] > maxx)
-                maxx = aux[it];
+            if (it > maxx)
+                maxx = it;
         for (long long exp = 1; maxx / exp > 0; exp *= x)
         {
             long long size_aux = aux.size();
             std::vector<long long> res(size_aux);
             long long i;
-            vector<long long> fr(x, 0);
+            std::vector<long long> fr(x, 0);
             for (auto it : aux)
                 fr[int(it / exp) % x]++;
             for (i = 1; i < x; i++)
@@ -55,71 +55,19 @@ public:
                 res[fr[int(aux[i] / exp) % x] - 1] = aux[i];
                 fr[int(aux[i] / exp) % x]--;
             }
+
             aux.clear();
             for (auto el : res)
                 aux.push_back(el);
         }
-
-        clock_t end = clock();
-        if (checker(aux))
-            return static_cast<double>(end - start) / CLOCKS_PER_SEC;
-        return -1;
-    }
-    
-    double radixSort_2la16()
-    {
-        std::vector<T> aux = data;
-        clock_t start = clock();
-
-        long long maxx = aux[0];
-        for (auto it : aux)
-            if (aux[it] > maxx)
-                maxx = aux[it];
-        for (long long exp = 1; maxx / exp > 0; exp = exp << 16)
-        {
-            long long size_aux = aux.size();
-            std::vector<long long> res(size_aux);
-            long long i, fr[65536] = {};
-            for (auto it : aux)
-                fr[int(it / exp) % 65536]++;
-            for (i = 1; i < 65536; i++)
-                fr[i] += fr[i - 1];
-            for (i = size_aux - 1; i >= 0; i--)
-            {
-                res[fr[int(aux[i] / exp) % 65536] - 1] = aux[i];
-                fr[int(aux[i] / exp) % 65536]--;
-            }
-            aux.clear();
-            for (auto el : res)
-                aux.push_back(el);
-        }
-
-        clock_t end = clock();
-        if (checker(aux))
-            return static_cast<double>(end - start) / CLOCKS_PER_SEC;
-        return -1;
     }
 
-    double mergeSort()
-    {
-        std::vector<T> res = data;
-
-        std::vector<T> aux(data.size());
-
-        long long size_aux = aux.size();
-        clock_t start = clock();
-        mergeSorter(aux, res, 0, size_aux - 1);
-        clock_t end = clock();
-        if (checker(res))
-            return static_cast<double>(end - start) / CLOCKS_PER_SEC;
-        return -1;
-    }
-
+    // method for merge sort
     void mergeSorter(std::vector<T> &aux, std::vector<T> &res, int left, int right)
     {
         if (left < right)
         {
-            long long mid = left + (right - left) / 2;
+            long long mid = left + (right - left) / 2 ;
             mergeSorter(aux, res, left, mid);
             mergeSorter(aux, res, mid + 1, right);
             long long i = left, j = mid + 1, k = 0;
@@ -135,6 +83,114 @@ public:
             for (i = left, j = 0; i <= right; i++, j++)
                 res[i] = aux[j];
         }
+    }
+
+public:
+    coolVector() = default;
+
+    void add(T element)
+    {
+        data.push_back(element);
+    }
+
+    double radixSort(const int x) {
+        std::vector<T> aux = data;
+        std::vector<T> positives, negatives;
+
+        clock_t start=clock();
+
+        for (auto elem : aux) {
+            if (elem < 0) {
+                negatives.push_back(-elem); // Make negative numbers positive for sorting
+            } else {
+                positives.push_back(elem);
+            }
+        }
+
+        for (int i = 0; i < negatives.size(); i++) {
+            double p = double_to_uint(negatives[i]);
+            negatives[i] = p;
+        }
+
+        for (int i = 0; i < positives.size(); i++) {
+            double p = double_to_uint(positives[i]);
+            positives[i] = p;
+        }
+
+        radixSort_x(x, negatives);
+        radixSort_x(x, positives);
+
+        // Convert sorted negative integers back to floating-point numbers and reverse the sign
+        for (int i = 0; i < negatives.size(); i++) {
+            negatives[i] = uint_to_double(negatives[i]);
+        }
+
+        for (int i = 0; i < positives.size(); i++) {
+            positives[i] = uint_to_double(positives[i]);
+        }
+
+        // Merge sorted negative and positive numbers
+        aux.clear();
+        for (int i = negatives.size() - 1; i >= 0; i--) {
+            aux.push_back(-negatives[i]);
+        }
+        for (int i = 0; i < positives.size(); i++) {
+            aux.push_back(positives[i]);
+        }
+
+        clock_t end = clock();
+        if (checker(aux))
+            return static_cast<double>(end - start) / CLOCKS_PER_SEC;
+        return -1;
+    }
+    
+//    double radixSort_2la16()
+//    {
+//        std::vector<T> aux = data;
+//        clock_t start = clock();
+//
+//        long long maxx = aux[0];
+//        for (auto it : aux)
+//            if (aux[it] > maxx)
+//                maxx = aux[it];
+//        for (long long exp = 1; maxx / exp > 0; exp = exp << 16)
+//        {
+//            long long size_aux = aux.size();
+//            std::vector<long long> res(size_aux);
+//            long long i, fr[65536] = {};
+//            for (auto it : aux)
+//                fr[int(it / exp) % 65536]++;
+//            for (i = 1; i < 65536; i++)
+//                fr[i] += fr[i - 1];
+//            for (i = size_aux - 1; i >= 0; i--)
+//            {
+//                res[fr[int(aux[i] / exp) % 65536] - 1] = aux[i];
+//                fr[int(aux[i] / exp) % 65536]--;
+//            }
+//            aux.clear();
+//            for (auto el : res)
+//                aux.push_back(el);
+//        }
+//
+//        clock_t end = clock();
+//        if (checker(aux))
+//            return static_cast<double>(end - start) / CLOCKS_PER_SEC;
+//        return -1;
+//    }
+
+    double mergeSort()
+    {
+        std::vector<T> res = data;
+
+        std::vector<T> aux(data.size());
+
+        long long size_aux = aux.size();
+        clock_t start = clock();
+        mergeSorter(aux, res, 0, size_aux - 1);
+        clock_t end = clock();
+        if (checker(res))
+            return static_cast<double>(end - start) / CLOCKS_PER_SEC;
+        return -1;
     }
 
     double shellSort()
