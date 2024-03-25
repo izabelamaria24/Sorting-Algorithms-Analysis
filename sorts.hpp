@@ -107,6 +107,7 @@ public:
             }
         }
 
+        // convert floating point numbers to int
         for (int i = 0; i < negatives.size(); i++) {
             double p = double_to_uint(negatives[i]);
             negatives[i] = p;
@@ -117,10 +118,11 @@ public:
             positives[i] = p;
         }
 
+        // apply radix sort on each vector
         radixSort_x(x, negatives);
         radixSort_x(x, positives);
 
-        // Convert sorted negative integers back to floating-point numbers and reverse the sign
+        // convert sorted integers back to floating-point numbers
         for (int i = 0; i < negatives.size(); i++) {
             negatives[i] = uint_to_double(negatives[i]);
         }
