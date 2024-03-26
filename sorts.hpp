@@ -36,7 +36,7 @@ private:
     void radixSort_x(const int x, std::vector<T>&aux)
     {
         if (aux.empty()) return;
-        T maxx = aux[0];
+        long long maxx = aux[0];
         for (auto it : aux)
             if (it > maxx)
                 maxx = it;
@@ -47,13 +47,13 @@ private:
             long long i;
             std::vector<long long> fr(x, 0);
             for (auto it : aux)
-                fr[int(it / exp) % x]++;
+                fr[(long long)(it / exp) % x]++;
             for (i = 1; i < x; i++)
                 fr[i] += fr[i - 1];
             for (i = size_aux - 1; i >= 0; i--)
             {
-                res[fr[int(aux[i] / exp) % x] - 1] = aux[i];
-                fr[int(aux[i] / exp) % x]--;
+                res[fr[(long long)(aux[i] / exp) % x] - 1] = aux[i];
+                fr[(long long)(aux[i] / exp) % x]--;
             }
 
             aux.clear();
