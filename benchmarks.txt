@@ -1,8 +1,25 @@
-Native sort on test_int_0: 44.9038 seconds
-Heap sort on test_int_0: 134.657 seconds
-Bucket sort on test_int_0: 24.7956 seconds
-Radix 10 sort on test_int_0: 66.6926 seconds
-Radix 1<<16 sort on test_int_0: 16.8439 seconds
-Merge sort on test_int_0: 44.8049 seconds
-Counting sort on test_int_0: 35.4663 seconds
-Shell sort on test_int_0: 326.808 seconds
+Results for test_float_1, of size N=10000:
+Native sort on test_float_1: 0.000372 seconds
+Heap sort on test_float_1: 0.000644 seconds
+Merge sort on test_float_1: 0.000496 seconds
+Shell sort on test_float_1: 0.000815 seconds
+Results for test_float_2, of size N=100000:
+Native sort on test_float_2: 0.004495 seconds
+Heap sort on test_float_2: 0.008264 seconds
+Merge sort on test_float_2: 0.00616 seconds
+Shell sort on test_float_2: 0.012115 seconds
+Results for test_float_3, of size N=1000000:
+Native sort on test_float_3: 0.053928 seconds
+Heap sort on test_float_3: 0.100909 seconds
+Merge sort on test_float_3: 0.072925 seconds
+Shell sort on test_float_3: 0.176427 seconds
+Results for test_float_4, of size N=10000000:
+Native sort on test_float_4: 0.604816 seconds
+Heap sort on test_float_4: 2.11616 seconds
+Merge sort on test_float_4: 0.836722 seconds
+Shell sort on test_float_4: 2.77345 seconds
+Results for test_float_5, of size N=100000000:
+Native sort on test_float_5: 5.99686 seconds
+Heap sort on test_float_5: 33.0406 seconds
+Merge sort on test_float_5: 8.95417 seconds
+Shell sort on test_float_5: 41.7927 seconds

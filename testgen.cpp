@@ -6,32 +6,40 @@
     *-*
 */
 
-
 #include <iostream>
 #include <fstream>
-#include <cstdlib> 
+#include <cstdlib>
 #include <ctime>
-
+#include <vector>
+#include <algorithm>
+#include <cmath>
 using namespace std;
 
-void genFiles(string file, const int nb, auto seed) {
-    for(int i=0; i<nb; ++i) {
-        string aux = file;
-        aux += to_string(i);
-        ofstream g(aux);
+void genFiles(string file, auto seed, const int N, const int i)
+{
+    string aux = file;
+    aux += to_string(i);
+    ofstream g(aux);
+    for (int it = 0; it < N; ++it)
+        g << (seed * (rand() % 1572869)) / (seed * (rand() % 24593) + 1) << ' ';
 
-        for(int it=0; it<201326611; ++it) {
-            g<<(seed*(rand()%1572869))/(seed*(rand()%24593)+1)<<' ';
-        }
-        g.close();
-    }
+    g.close();
 }
 
 int main()
 {
+    const int T = 5;
     srand(time(0));
     string file = "test_int_";
-    genFiles(file, 5, 20);
+    for (int i = 1; i <= T; ++i)
+    {
+        genFiles(file, 5, pow(10, i+3), i);
+    }
+
     file = "test_float_";
-    genFiles(file, 5, 15.13);
+
+    for (int i = 1; i <= T; ++i)
+    {
+        genFiles(file, 5.3, pow(10, i+3), i);
+    }
 }

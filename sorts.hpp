@@ -342,6 +342,10 @@ public:
         }
         std::cout << '\n';
     }
+    int size() const
+    {
+        return data.size();
+    }
 };
 
 #endif

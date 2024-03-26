@@ -2,93 +2,135 @@
 #include <fstream>
 #include "sorts.hpp"
 using namespace std;
-int main() {
-    ofstream g("benchmarks.txt");
 
-    const int testNr = 5;
+ofstream g("benchmarks.txt");
+void testInt(string file)
+{
 
-    // ifstream f("test.txt");
-    // double x;
-    // coolVector<double> v;
-    // while(f>>x) {
-    //     v.add(x);
-    // }
-    // cout<<v.radixSort_10()<<" "<<v.radixSort_2la16()<<" <<v.bucketSort()<<" "<<v.functieSortare()<<" "<<v.heapSort()<<" "<<v.mergeSort()<<" "<<v.shellSort()<<" "<<v.countingSort();
-    
-
-    for (int i=0; i < 1; ++i) {
-        double rez;
-        string file = "test_int_" + to_string(i);
-        ifstream f(file);
-        coolVector<int> v;
-        int x;
-        while(f>>x) {
-            v.add(x);
-        }
-        f.close();
-
-        rez = v.functieSortare(); 
-        g<<"Native sort on "<<file<<": ";
-        rez == -1 ? (g<<"Sort messed up") : g<<rez<<" seconds";
-        g<<'\n';
-
-        rez = v.heapSort(); 
-        g<<"Heap sort on "<<file<<": ";
-        rez == -1 ? (g<<"Sort messed up") : g<<rez<<" seconds";
-        g<<'\n';
-
-        rez = v.bucketSort(); 
-        g<<"Bucket sort on "<<file<<": ";
-        rez == -1 ? (g<<"Sort messed up") : g<<rez<<" seconds";
-        g<<'\n';
-
-        rez = v.radixSort(2);
-        g<<"Bucket sort on "<<file<<": ";
-        rez == -1 ? (g<<"Sort messed up") : g<<rez<<" seconds";
-        g<<'\n';
-
-//        rez = v.radixSort_10();
-//        g<<"Radix 10 sort on "<<file<<": ";
-//        rez == -1 ? (g<<"Sort messed up") : g<<rez<<" seconds";
-//        g<<'\n';
-//
-//        rez = v.radixSort_2la16();
-//        g<<"Radix 1<<16 sort on "<<file<<": ";
-//        rez == -1 ? (g<<"Sort messed up") : g<<rez<<" seconds";
-//        g<<'\n';
-
-        rez = v.mergeSort(); 
-        g<<"Merge sort on "<<file<<": ";
-        rez == -1 ? (g<<"Sort messed up") : g<<rez<<" seconds";
-        g<<'\n';
-
-        rez = v.countingSort(); 
-        g<<"Counting sort on "<<file<<": ";
-        rez == -1 ? (g<<"Sort messed up") : g<<rez<<" seconds";
-        g<<'\n';
-
-        rez = v.shellSort(); 
-        g<<"Shell sort on "<<file<<": ";
-        rez == -1 ? (g<<"Sort messed up") : g<<rez<<" seconds";
-        g<<'\n';
+    ifstream f(file);
+    double rez;
+    coolVector<int> v;
+    int x;
+    while (f >> x)
+    {
+        v.add(x);
     }
+    f.close();
+    g << "Results for " << file << ":\n";
+    rez = v.functieSortare();
+    g << "Native sort on " << file << ": ";
+    rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    g << '\n';
 
-    // for (int i=0; i < testNr; ++i) {
-    //     string file = "test_float_" + to_string(i);
-    //     double rez; 
-    //     ifstream f(file);
-    //     coolVector<double> v;
-    //     double x;
-    //     while(f>>x) {
-    //         v.add(x);
-    //     }
-    //     f.close();
+    rez = v.heapSort();
+    g << "Heap sort on " << file << ": ";
+    rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    g << '\n';
 
-    //     rez = v.bucketSort(); 
-    //     g<<"Bucket sort on "<<file<<": ";
-    //     rez == -1 ? (g<<"Sort messed up") : g<<rez<<" seconds";
-    //     g<<'\n';
+    rez = v.bucketSort();
+    g << "Bucket sort on " << file << ": ";
+    rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    g << '\n';
 
-    // }
-    
+    rez = v.radixSort(10);
+    g << "Radix 10 sort on " << file << ": ";
+    rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    g << '\n';
+
+    rez = v.radixSort(1 << 16);
+    g << "Radix 1<<16 sort on " << file << ": ";
+    rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    g << '\n';
+
+    rez = v.mergeSort();
+    g << "Merge sort on " << file << ": ";
+    rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    g << '\n';
+
+    rez = v.countingSort();
+    g << "Counting sort on " << file << ": ";
+    rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    g << '\n';
+
+    rez = v.shellSort();
+    g << "Shell sort on " << file << ": ";
+    rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    g << '\n';
+}
+
+void testFloat(string file)
+{
+
+    ifstream f(file);
+    double rez;
+    coolVector<double> v;
+    double x;
+    while (f >> x)
+    {
+        v.add(x);
+    }
+    f.close();
+    g << "Results for " << file << ", of size N="<<v.size()<<":\n";
+    rez = v.functieSortare();
+    cout << "sortare nativa pe " << file << '\n';
+    g << "Native sort on " << file << ": ";
+    rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    g << '\n';
+
+    cout<<"heap sort pe "<<file<<'\n';
+    rez = v.heapSort();
+    g << "Heap sort on " << file << ": ";
+    rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    g << '\n';
+
+    // cout<<"bucket sort pe "<<file<<'\n';
+    // rez = v.bucketSort();
+    // g << "Bucket sort on " << file << ": ";
+    // rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    // g << '\n';
+
+    // cout<<"radix sort10 pe "<<file<<'\n';
+    // rez = v.radixSort(10);
+    // g << "Bucket sort on " << file << ": ";
+    // rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    // g << '\n';
+
+    // cout<<"radix sort1<<16 pe "<<file<<'\n';
+    // rez = v.radixSort(1 << 16);
+    // g << "Bucket sort on " << file << ": ";
+    // rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    // g << '\n';
+
+    cout<<"merge sort pe "<<file<<'\n';
+    rez = v.mergeSort();
+    g << "Merge sort on " << file << ": ";
+    rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    g << '\n';
+
+    // cout<<"counting sort pe "<<file<<'\n';
+    // rez = v.countingSort();
+    // g << "Counting sort on " << file << ": ";
+    // rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    // g << '\n';
+
+    cout<<"shell sort pe "<<file<<'\n';
+    rez = v.shellSort();
+    g << "Shell sort on " << file << ": ";
+    rez == -1 ? (g << "Sort messed up") : g << rez << " seconds";
+    g << '\n';
+}
+
+int main()
+{
+
+    for (int i = 1; i <= 5; ++i)
+    {
+
+        string file = "test_int_" + to_string(i);
+
+        // testInt(file);
+
+        file = "test_float_" + to_string(i);
+        testFloat(file);
+    }
 }
