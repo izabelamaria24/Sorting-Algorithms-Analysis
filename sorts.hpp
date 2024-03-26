@@ -24,11 +24,12 @@ private:
         return 1;
     }
 
-    // methods for radix sort
+    // method for interpreting double as long int
     long long double_to_uint(double d) {
         return *reinterpret_cast<long long*>(&d);
     }
 
+    // method for interpreting long int as double
     double uint_to_double(long long i) {
         return *reinterpret_cast<double*>(&i);
     }
@@ -84,6 +85,29 @@ private:
                 res[i] = aux[j];
         }
     }
+
+    // auxiliary method for counting sort
+    void countingSortAux(std::vector<T>&aux)
+        {
+            for (int i = 0; i < aux.size(); i++)
+                aux[i] = double_to_uint(aux[i]);
+    
+            std::map<long long, int> count;
+            for (const auto &elem : aux)
+                count[elem]++;
+    
+            aux.clear();
+            for (const auto &elem : count)
+            {
+                long long value = elem.first;
+                int cnt = elem.second;
+                for (int i = 0; i < cnt; ++i)
+                    aux.emplace_back(value);
+            }
+    
+            for (int i = 0; i < aux.size(); i++)
+                aux[i] = uint_to_double(aux[i]);
+        }
 
 public:
     coolVector() = default;
@@ -225,20 +249,23 @@ public:
 
     double countingSort()
     {
-        std::vector<T> aux;
+        std::vector<T>aux, negatives, positives;
+
         clock_t start = clock();
 
-        std::map<T, int> count;
-        for (const auto &elem : data)
-            count[elem]++;
+        for (const auto& elem : data)
+            if (elem < 0)
+                negatives.push_back(-elem);
+            else positives.push_back(elem);
 
-        for (const auto &elem : count)
-        {
-            T value = elem.first;
-            int cnt = elem.second;
-            for (int i = 0; i < cnt; ++i)
-                aux.emplace_back(value);
-        }
+        countingSortAux(negatives);
+        countingSortAux(positives);
+
+        for (int i = negatives.size() - 1; i >= 0; i--)
+            aux.push_back(-negatives[i]);
+
+        for (int i = 0; i < positives.size(); i++)
+            aux.push_back(positives[i]);
 
         clock_t end = clock();
         if (checker(aux))
