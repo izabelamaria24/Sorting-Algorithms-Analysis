@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -Wall -Wextra -O2 -std=c++20 -w
 
-all: testgen sortBenchmark
+all: run
 
 run: testgen sortBenchmark
 	./testgen
