@@ -34,21 +34,25 @@ private:
         return *reinterpret_cast<double*>(&i);
     }
 
-    void radixSort_x(const int x, std::vector<T>&aux)
+    void radixSort_x(const int x, std::vector<long long> &aux)
     {
-        if (aux.empty()) return;
+        if (aux.empty())
+            return;
         long long maxx = aux[0];
         for (auto it : aux)
             if (it > maxx)
                 maxx = it;
-        for (long long exp = 1; maxx / exp > 0; exp *= x)
+        for (long long exp = 1; exp; exp *= x)
         {
+            if(maxx / exp == 0)
+                break;
             long long size_aux = aux.size();
             std::vector<long long> res(size_aux);
             long long i;
             std::vector<long long> fr(x, 0);
             for (auto it : aux)
                 fr[(long long)(it / exp) % x]++;
+            
             for (i = 1; i < x; i++)
                 fr[i] += fr[i - 1];
             for (i = size_aux - 1; i >= 0; i--)
@@ -117,29 +121,23 @@ public:
         data.push_back(element);
     }
 
-    double radixSort(const int x) {
+    double radixSort(const int x)
+    {
         std::vector<T> aux = data;
-        std::vector<T> positives, negatives;
+        std::vector<long long> positives, negatives;
 
-        clock_t start=clock();
+        clock_t start = clock();
 
-        for (auto elem : aux) {
-            if (elem < 0) {
-                negatives.push_back(-elem); // Make negative numbers positive for sorting
-            } else {
-                positives.push_back(elem);
+        for (auto elem : aux)
+        {
+            if (elem < 0)
+            {
+                negatives.push_back(double_to_uint (- elem)); // Make negative numbers positive for sorting
             }
-        }
-
-        // convert floating point numbers to int
-        for (int i = 0; i < negatives.size(); i++) {
-            double p = double_to_uint(negatives[i]);
-            negatives[i] = p;
-        }
-
-        for (int i = 0; i < positives.size(); i++) {
-            double p = double_to_uint(positives[i]);
-            positives[i] = p;
+            else
+            {
+                positives.push_back(double_to_uint(elem));
+            }
         }
 
         // apply radix sort on each vector
@@ -147,20 +145,24 @@ public:
         radixSort_x(x, positives);
 
         // convert sorted integers back to floating-point numbers
-        for (int i = 0; i < negatives.size(); i++) {
+        for (int i = 0; i < negatives.size(); i++)
+        {
             negatives[i] = uint_to_double(negatives[i]);
         }
 
-        for (int i = 0; i < positives.size(); i++) {
+        for (int i = 0; i < positives.size(); i++)
+        {
             positives[i] = uint_to_double(positives[i]);
         }
 
         // Merge sorted negative and positive numbers
         aux.clear();
-        for (int i = negatives.size() - 1; i >= 0; i--) {
+        for (int i = negatives.size() - 1; i >= 0; i--)
+        {
             aux.push_back(-negatives[i]);
         }
-        for (int i = 0; i < positives.size(); i++) {
+        for (int i = 0; i < positives.size(); i++)
+        {
             aux.push_back(positives[i]);
         }
 
@@ -169,7 +171,7 @@ public:
             return static_cast<double>(end - start) / CLOCKS_PER_SEC;
         return -1;
     }
-    
+
 //    double radixSort_2la16()
 //    {
 //        std::vector<T> aux = data;
