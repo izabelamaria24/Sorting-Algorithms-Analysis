@@ -6,43 +6,32 @@ def process_data():
     file = open("benchmarks.txt", "r")
     file_content = file.read()
 
-    # Define a dictionary to store the results
-    results_dict = {}
-
-    # Define regex pattern to extract data
+    data = {}
     pattern = r'Results for ([\w\s\d<>]+), of size N=\d+:\n(.*?)(?=\n\nResults|$)'
-
-    # Extracting results for each sorting algorithm
     matches = re.findall(pattern, file_content, re.DOTALL)
 
-    # Loop through each match
     for match in matches:
         algorithm_name = match[0]
         results = match[1]
 
-        # Extract execution times for each test type
         int_execution_times = re.findall(r'(\w+ sort) on test_int_\d+: (\d+\.\d+) seconds', results)
         float_execution_times = re.findall(r'(\w+ sort) on test_float_\d+: (\d+\.\d+) seconds', results)
 
-        # Organize the results in the dictionary
         for algorithm, time in int_execution_times:
-            if algorithm not in results_dict:
-                results_dict[algorithm] = {'int': [], 'float': []}
-            results_dict[algorithm]['int'].append(float(time))
+            if algorithm not in data:
+                data[algorithm] = {'int': [], 'float': []}
+            data[algorithm]['int'].append(float(time))
 
         for algorithm, time in float_execution_times:
-            if algorithm not in results_dict:
-                results_dict[algorithm] = {'int': [], 'float': []}
-            results_dict[algorithm]['float'].append(float(time))
+            if algorithm not in data:
+                data[algorithm] = {'int': [], 'float': []}
+            data[algorithm]['float'].append(float(time))
 
-    return results_dict
+    return data
 
 
 def draw(input_size, execution_times_1, execution_times_2, sort_label, label1, label2):
-    # Plotting results for test_int_1
     plt.plot(input_size, execution_times_1, marker='o', label=label1, color='purple')
-
-    # Plotting results for test_float_1
     plt.plot(input_size, execution_times_2, marker='o', label=label2, color='red')
 
     plt.title(f'{sort_label} Performance')
@@ -52,7 +41,7 @@ def draw(input_size, execution_times_1, execution_times_2, sort_label, label1, l
     plt.yscale('log')
     plt.legend()
     plt.grid(True)
-    plt.savefig(f'{sort_label}.png')  # Save as PNG format
+    plt.savefig(f'{sort_label}.png')
     plt.show()
 
 
